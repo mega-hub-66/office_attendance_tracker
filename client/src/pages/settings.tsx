@@ -160,7 +160,7 @@ export default function Settings() {
   };
 
   const quarters = ["Q1", "Q2", "Q3", "Q4"];
-  const years = ["2024", "2023", "2022", "2021"];
+  const years = ["2025", "2024", "2023", "2022"];
 
   return (
     <div className="min-h-screen">

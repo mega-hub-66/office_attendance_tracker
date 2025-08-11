@@ -44,13 +44,13 @@ export class MemStorage implements IStorage {
 
   private initializeDefaultData() {
     // Initialize default quarter settings for current quarter
-    const currentQuarter = "Q1-2024";
+    const currentQuarter = "Q3-2025";
     const defaultQuarterSettings: QuarterSettings = {
       id: randomUUID(),
       quarter: currentQuarter,
-      year: 2024,
-      month1WorkDays: 22,
-      month2WorkDays: 20,
+      year: 2025,
+      month1WorkDays: 23,
+      month2WorkDays: 21,
       month3WorkDays: 21,
     };
     this.quarterSettings.set(currentQuarter, defaultQuarterSettings);
@@ -142,7 +142,13 @@ export class MemStorage implements IStorage {
   async updateAppSettings(updateData: Partial<InsertAppSettings>): Promise<AppSettings | undefined> {
     if (!this.appSettings) return undefined;
     
-    this.appSettings = { ...this.appSettings, ...updateData };
+    const updated: AppSettings = {
+      ...this.appSettings,
+      ...updateData,
+      darkMode: updateData.darkMode ?? this.appSettings.darkMode,
+      notifications: updateData.notifications ?? this.appSettings.notifications,
+    };
+    this.appSettings = updated;
     return this.appSettings;
   }
 }

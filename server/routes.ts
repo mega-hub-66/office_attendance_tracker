@@ -53,7 +53,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const record = await storage.createAttendanceRecord(validatedData);
       res.status(201).json(record);
     } catch (error) {
-      res.status(400).json({ message: "Invalid attendance data", error: error.message });
+      res.status(400).json({ message: "Invalid attendance data", error: (error as Error).message });
     }
   });
 
@@ -67,7 +67,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json(record);
     } catch (error) {
-      res.status(400).json({ message: "Invalid attendance data", error: error.message });
+      res.status(400).json({ message: "Invalid attendance data", error: (error as Error).message });
     }
   });
 
@@ -113,7 +113,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const settings = await storage.createQuarterSettings(validatedData);
       res.status(201).json(settings);
     } catch (error) {
-      res.status(400).json({ message: "Invalid quarter settings", error: error.message });
+      res.status(400).json({ message: "Invalid quarter settings", error: (error as Error).message });
     }
   });
 
@@ -127,7 +127,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json(settings);
     } catch (error) {
-      res.status(400).json({ message: "Invalid quarter settings", error: error.message });
+      res.status(400).json({ message: "Invalid quarter settings", error: (error as Error).message });
     }
   });
 
@@ -150,7 +150,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const settings = await storage.createAppSettings(validatedData);
       res.status(201).json(settings);
     } catch (error) {
-      res.status(400).json({ message: "Invalid app settings", error: error.message });
+      res.status(400).json({ message: "Invalid app settings", error: (error as Error).message });
     }
   });
 
@@ -163,7 +163,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json(settings);
     } catch (error) {
-      res.status(400).json({ message: "Invalid app settings", error: error.message });
+      res.status(400).json({ message: "Invalid app settings", error: (error as Error).message });
     }
   });
 
