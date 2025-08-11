@@ -220,29 +220,7 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Quick Actions */}
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <Link href="/history">
-              <Button 
-                variant="secondary"
-                className="w-full py-3 rounded-xl font-medium ios-button smooth-transition"
-                data-testid="button-history"
-              >
-                View History
-              </Button>
-            </Link>
-            <Link href="/settings">
-              <Button 
-                variant="secondary"
-                className="w-full py-3 rounded-xl font-medium ios-button smooth-transition"
-                data-testid="button-settings"
-              >
-                Settings
-              </Button>
-            </Link>
-          </div>
-        </div>
+
       </main>
     </div>
   );
