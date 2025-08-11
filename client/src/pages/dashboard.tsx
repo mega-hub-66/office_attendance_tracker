@@ -112,6 +112,52 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="px-4 py-6 space-y-6">
+        {/* Quick Action Button */}
+        <Link href="/log">
+          <Button 
+            className="w-full bg-ios-blue hover:bg-ios-blue/90 text-white py-4 rounded-2xl font-semibold ios-button smooth-transition"
+            data-testid="button-log-attendance"
+          >
+            Log Office Attendance
+          </Button>
+        </Link>
+
+        {/* Monthly Breakdown */}
+        <Card className="ios-card p-6">
+          <h3 className="text-lg font-semibold mb-4 font-display" data-testid="text-current-month">
+            {currentMonth.replace('-', ' ')}
+          </h3>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-ios-secondary-label-light dark:text-ios-secondary-label-dark">Work Days</span>
+              <span className="font-medium" data-testid="text-month-work-days">{monthProgress.workDays}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-ios-secondary-label-light dark:text-ios-secondary-label-dark">Days in Office</span>
+              <span className="font-medium text-ios-green" data-testid="text-month-office-days">{monthProgress.officeDays}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-ios-secondary-label-light dark:text-ios-secondary-label-dark">Target (50%)</span>
+              <span className="font-medium" data-testid="text-month-target">{monthProgress.target}</span>
+            </div>
+            <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-ios-green rounded-full transition-all duration-500" 
+                style={{ width: `${Math.min(100, monthProgress.percentage)}%` }}
+                data-testid="progress-month"
+              />
+            </div>
+            <div className="text-center">
+              <span className={`text-sm font-medium ${monthProgress.officeDays >= monthProgress.target ? 'text-ios-green' : 'text-ios-orange'}`}>
+                {monthProgress.officeDays >= monthProgress.target 
+                  ? `${monthProgress.officeDays - monthProgress.target} days ahead this month`
+                  : `${monthProgress.target - monthProgress.officeDays} days behind this month`
+                }
+              </span>
+            </div>
+          </div>
+        </Card>
+
         {/* Quarterly Progress Card */}
         <Card className="ios-card p-6">
           <div className="text-center">
@@ -174,52 +220,8 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Monthly Breakdown */}
-        <Card className="ios-card p-6">
-          <h3 className="text-lg font-semibold mb-4 font-display" data-testid="text-current-month">
-            {currentMonth.replace('-', ' ')}
-          </h3>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-ios-secondary-label-light dark:text-ios-secondary-label-dark">Work Days</span>
-              <span className="font-medium" data-testid="text-month-work-days">{monthProgress.workDays}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-ios-secondary-label-light dark:text-ios-secondary-label-dark">Days in Office</span>
-              <span className="font-medium text-ios-green" data-testid="text-month-office-days">{monthProgress.officeDays}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-ios-secondary-label-light dark:text-ios-secondary-label-dark">Target (50%)</span>
-              <span className="font-medium" data-testid="text-month-target">{monthProgress.target}</span>
-            </div>
-            <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-ios-green rounded-full transition-all duration-500" 
-                style={{ width: `${Math.min(100, monthProgress.percentage)}%` }}
-                data-testid="progress-month"
-              />
-            </div>
-            <div className="text-center">
-              <span className={`text-sm font-medium ${monthProgress.officeDays >= monthProgress.target ? 'text-ios-green' : 'text-ios-orange'}`}>
-                {monthProgress.officeDays >= monthProgress.target 
-                  ? `${monthProgress.officeDays - monthProgress.target} days ahead this month`
-                  : `${monthProgress.target - monthProgress.officeDays} days behind this month`
-                }
-              </span>
-            </div>
-          </div>
-        </Card>
-
         {/* Quick Actions */}
         <div className="space-y-4">
-          <Link href="/log">
-            <Button 
-              className="w-full bg-ios-blue hover:bg-ios-blue/90 text-white py-4 rounded-2xl font-semibold ios-button smooth-transition"
-              data-testid="button-log-attendance"
-            >
-              Log Office Attendance
-            </Button>
-          </Link>
           <div className="grid grid-cols-2 gap-4">
             <Link href="/history">
               <Button 

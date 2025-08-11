@@ -148,18 +148,6 @@ export default function LogAttendance() {
             </div>
           </div>
           
-          {/* Office Attendance Button */}
-          <div className="mb-8">
-            <button
-              className="w-full p-6 border-2 border-ios-blue bg-ios-blue/10 text-ios-blue rounded-2xl ios-button smooth-transition"
-              data-testid="button-office-attendance"
-            >
-              <div className="flex items-center justify-center space-x-3">
-                <Building2 className="w-8 h-8" />
-                <span className="text-xl font-semibold">Office Attendance</span>
-              </div>
-            </button>
-          </div>
           
           {/* Save Button */}
           <Button
