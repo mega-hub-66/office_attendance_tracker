@@ -137,8 +137,8 @@ export default function Dashboard() {
               <span className="font-medium text-ios-green" data-testid="text-month-office-days">{monthProgress.officeDays}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-ios-secondary-label-light dark:text-ios-secondary-label-dark">Target (50%)</span>
-              <span className="font-medium" data-testid="text-month-target">{monthProgress.target}</span>
+              <span className="text-ios-secondary-label-light dark:text-ios-secondary-label-dark">Target</span>
+              <span className="font-medium" data-testid="text-month-target">50%</span>
             </div>
             <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
               <div 
