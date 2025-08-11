@@ -8,6 +8,8 @@ import { getCurrentQuarter, getQuarterMonths } from "@/lib/date-utils";
 import type { AttendanceRecord, QuarterSettings } from "@shared/schema";
 
 const availableQuarters = [
+  "Q4-2027", "Q3-2027", "Q2-2027", "Q1-2027",
+  "Q4-2026", "Q3-2026", "Q2-2026", "Q1-2026",
   "Q4-2025", "Q3-2025", "Q2-2025", "Q1-2025"
 ];
 

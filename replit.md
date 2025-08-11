@@ -4,6 +4,14 @@
 
 A Progressive Web Application (PWA) for tracking office attendance with a focus on meeting quarterly targets. The app allows users to log their daily attendance (office, home, or day off) and provides visual progress tracking to ensure they meet the 50% office attendance requirement per quarter. Built as a mobile-first web application with offline capabilities and iOS-like design patterns.
 
+## Recent Changes (August 2025)
+
+- Updated app to use 2025 as current year with Q3-2025 as active quarter
+- Settings page now shows years 2025-2028 (no historical years below 2025)
+- History page updated to show quarters from 2025-2027
+- Fixed TypeScript errors in error handling
+- Set proper work day defaults for Q3-2025 (July: 23, August: 21, September: 21)
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
