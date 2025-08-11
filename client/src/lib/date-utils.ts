@@ -13,13 +13,18 @@ export function formatDisplayDate(dateString: string): string {
 }
 
 export function getQuarterFromDate(date: Date): string {
-  const month = date.getMonth() + 1;
+  const month = date.getMonth() + 1; // 1-12
   const year = date.getFullYear();
   
-  if (month <= 3) return `Q1-${year}`;
-  if (month <= 6) return `Q2-${year}`;
-  if (month <= 9) return `Q3-${year}`;
-  return `Q4-${year}`;
+  // Fiscal year: Q1=Feb,Mar,Apr Q2=May,Jun,Jul Q3=Aug,Sep,Oct Q4=Nov,Dec,Jan
+  if (month >= 2 && month <= 4) return `Q1-${year}`;
+  if (month >= 5 && month <= 7) return `Q2-${year}`;
+  if (month >= 8 && month <= 10) return `Q3-${year}`;
+  // November and December belong to Q4 of current year, January belongs to Q4 of previous year
+  if (month >= 11 && month <= 12) return `Q4-${year}`;
+  if (month === 1) return `Q4-${year - 1}`;
+  
+  return `Q1-${year}`; // fallback
 }
 
 export function getMonthFromDate(date: Date): string {
@@ -42,13 +47,14 @@ export function getQuarterMonths(quarter: string): string[] {
   
   switch (q) {
     case 'Q1':
-      return [`January-${yearNum}`, `February-${yearNum}`, `March-${yearNum}`];
+      return [`February-${yearNum}`, `March-${yearNum}`, `April-${yearNum}`];
     case 'Q2':
-      return [`April-${yearNum}`, `May-${yearNum}`, `June-${yearNum}`];
+      return [`May-${yearNum}`, `June-${yearNum}`, `July-${yearNum}`];
     case 'Q3':
-      return [`July-${yearNum}`, `August-${yearNum}`, `September-${yearNum}`];
+      return [`August-${yearNum}`, `September-${yearNum}`, `October-${yearNum}`];
     case 'Q4':
-      return [`October-${yearNum}`, `November-${yearNum}`, `December-${yearNum}`];
+      // Q4 spans November-December of current year and January of next year
+      return [`November-${yearNum}`, `December-${yearNum}`, `January-${yearNum + 1}`];
     default:
       return [];
   }

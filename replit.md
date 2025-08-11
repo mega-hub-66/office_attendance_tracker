@@ -10,7 +10,8 @@ A Progressive Web Application (PWA) for tracking office attendance with a focus 
 - Settings page now shows years 2025-2028 (no historical years below 2025)
 - History page updated to show quarters from 2025-2027
 - Fixed TypeScript errors in error handling
-- Set proper work day defaults for Q3-2025 (July: 23, August: 21, September: 21)
+- Fixed fiscal quarter calculation: Q1=Feb/Mar/Apr, Q2=May/Jun/Jul, Q3=Aug/Sep/Oct, Q4=Nov/Dec/Jan
+- Set proper work day defaults for Q3-2025 (August: 21, September: 21, October: 23)
 - Simplified attendance tracking to office-only (removed Home and Day Off options)
 - Added date picker to log previous attendance days (cannot select future dates)
 - Reorganized main page layout: Log Office Attendance button at top, month info second, quarter info third
