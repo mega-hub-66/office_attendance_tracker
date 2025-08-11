@@ -217,7 +217,7 @@ export default function Dashboard() {
               className="w-full bg-ios-blue hover:bg-ios-blue/90 text-white py-4 rounded-2xl font-semibold ios-button smooth-transition"
               data-testid="button-log-attendance"
             >
-              Log Today's Attendance
+              Log Office Attendance
             </Button>
           </Link>
           <div className="grid grid-cols-2 gap-4">

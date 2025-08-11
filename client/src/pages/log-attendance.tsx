@@ -2,47 +2,26 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { formatDate, formatDisplayDate, getCurrentQuarter, getCurrentMonth } from "@/lib/date-utils";
-import { ArrowLeft, Building2, Home, Sun } from "lucide-react";
+import { formatDate, formatDisplayDate, getQuarterFromDate, getMonthFromDate } from "@/lib/date-utils";
+import { ArrowLeft, Building2, Calendar } from "lucide-react";
 import { Link } from "wouter";
 import type { AttendanceRecord, InsertAttendanceRecord } from "@shared/schema";
 
-type LocationType = 'office' | 'home' | 'dayoff';
-
-const locationOptions = [
-  {
-    value: 'office' as LocationType,
-    label: 'Office',
-    icon: Building2,
-    color: 'border-ios-blue bg-ios-blue/10 text-ios-blue',
-  },
-  {
-    value: 'home' as LocationType,
-    label: 'Home',
-    icon: Home,
-    color: 'border-gray-300 dark:border-gray-600',
-  },
-  {
-    value: 'dayoff' as LocationType,
-    label: 'Day Off',
-    icon: Sun,
-    color: 'border-gray-300 dark:border-gray-600',
-  },
-];
-
 export default function LogAttendance() {
-  const [selectedLocation, setSelectedLocation] = useState<LocationType>('office');
+  const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  const selectedDateDisplay = formatDisplayDate(selectedDate);
   const today = formatDate(new Date());
-  const todayDisplay = formatDisplayDate(today);
 
-  // Check if today's attendance is already logged
-  const { data: todayRecord } = useQuery<AttendanceRecord>({
-    queryKey: ["/api/attendance/date", today],
+  // Check if selected date's attendance is already logged
+  const { data: selectedDateRecord } = useQuery<AttendanceRecord>({
+    queryKey: ["/api/attendance/date", selectedDate],
     retry: false,
   });
 
@@ -53,8 +32,8 @@ export default function LogAttendance() {
 
   const saveAttendanceMutation = useMutation({
     mutationFn: async (data: InsertAttendanceRecord) => {
-      if (todayRecord) {
-        return apiRequest("PUT", `/api/attendance/${today}`, data);
+      if (selectedDateRecord) {
+        return apiRequest("PUT", `/api/attendance/${selectedDate}`, data);
       } else {
         return apiRequest("POST", "/api/attendance", data);
       }
@@ -62,10 +41,10 @@ export default function LogAttendance() {
     onSuccess: () => {
       toast({
         title: "Attendance Saved",
-        description: `Your attendance for ${todayDisplay} has been recorded.`,
+        description: `Office attendance for ${selectedDateDisplay} has been recorded.`,
       });
       queryClient.invalidateQueries({ queryKey: ["/api/attendance"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/attendance/date", today] });
+      queryClient.invalidateQueries({ queryKey: ["/api/attendance/date", selectedDate] });
       queryClient.invalidateQueries({ queryKey: ["/api/attendance/quarter"] });
       queryClient.invalidateQueries({ queryKey: ["/api/attendance/month"] });
     },
@@ -79,20 +58,19 @@ export default function LogAttendance() {
   });
 
   const handleSaveAttendance = () => {
+    const selectedDateObj = new Date(selectedDate);
     const data: InsertAttendanceRecord = {
-      date: today,
-      location: selectedLocation,
-      quarter: getCurrentQuarter(),
-      month: getCurrentMonth(),
+      date: selectedDate,
+      location: 'office',
+      quarter: getQuarterFromDate(selectedDateObj),
+      month: getMonthFromDate(selectedDateObj),
     };
 
     saveAttendanceMutation.mutate(data);
   };
 
-  // Set initial selection based on existing record
-  if (todayRecord && selectedLocation !== todayRecord.location) {
-    setSelectedLocation(todayRecord.location as LocationType);
-  }
+  // Get the maximum date (today)
+  const maxDate = formatDate(new Date());
 
   const getLocationColor = (location: string) => {
     switch (location) {
@@ -142,34 +120,45 @@ export default function LogAttendance() {
         {/* Log Attendance Card */}
         <Card className="ios-card p-6">
           <h2 className="text-xl font-bold mb-6 text-center font-display">
-            {todayRecord ? "Update Today's Attendance" : "Log Today's Attendance"}
+            {selectedDateRecord ? "Update Office Attendance" : "Log Office Attendance"}
           </h2>
-          <div className="text-center mb-6">
-            <div className="text-lg font-medium mb-2" data-testid="text-today-date">{todayDisplay}</div>
-            <div className="text-ios-secondary-label-light dark:text-ios-secondary-label-dark">
-              Choose your work location
+          
+          {/* Date Selection */}
+          <div className="space-y-4 mb-6">
+            <Label htmlFor="attendance-date">Select Date</Label>
+            <div className="relative">
+              <Calendar className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+              <Input
+                id="attendance-date"
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                max={maxDate}
+                className="pl-10"
+                data-testid="input-attendance-date"
+              />
+            </div>
+            <div className="text-center">
+              <div className="text-lg font-medium mb-2" data-testid="text-selected-date">
+                {selectedDateDisplay}
+              </div>
+              <div className="text-ios-secondary-label-light dark:text-ios-secondary-label-dark">
+                {selectedDate === today ? "Today" : new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long' })}
+              </div>
             </div>
           </div>
           
-          {/* Location Options */}
-          <div className="space-y-4 mb-8">
-            {locationOptions.map(({ value, label, icon: Icon, color }) => (
-              <button
-                key={value}
-                onClick={() => setSelectedLocation(value)}
-                className={`w-full p-4 border-2 rounded-2xl ios-button smooth-transition ${
-                  selectedLocation === value 
-                    ? 'border-ios-blue bg-ios-blue/10 text-ios-blue' 
-                    : color
-                }`}
-                data-testid={`button-location-${value}`}
-              >
-                <div className="flex items-center justify-center space-x-3">
-                  <Icon className="w-6 h-6" />
-                  <span className="text-lg font-semibold">{label}</span>
-                </div>
-              </button>
-            ))}
+          {/* Office Attendance Button */}
+          <div className="mb-8">
+            <button
+              className="w-full p-6 border-2 border-ios-blue bg-ios-blue/10 text-ios-blue rounded-2xl ios-button smooth-transition"
+              data-testid="button-office-attendance"
+            >
+              <div className="flex items-center justify-center space-x-3">
+                <Building2 className="w-8 h-8" />
+                <span className="text-xl font-semibold">Office Attendance</span>
+              </div>
+            </button>
           </div>
           
           {/* Save Button */}
@@ -181,7 +170,7 @@ export default function LogAttendance() {
           >
             {saveAttendanceMutation.isPending 
               ? "Saving..." 
-              : todayRecord 
+              : selectedDateRecord 
                 ? "Update Attendance" 
                 : "Save Attendance"
             }
@@ -219,7 +208,7 @@ export default function LogAttendance() {
           <Card className="ios-card p-6">
             <div className="text-center text-ios-secondary-label-light dark:text-ios-secondary-label-dark">
               <p>No attendance records yet.</p>
-              <p>Start by logging today's attendance!</p>
+              <p>Start by logging your office attendance!</p>
             </div>
           </Card>
         )}
